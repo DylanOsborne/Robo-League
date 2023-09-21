@@ -26,7 +26,7 @@ public class CarController : MonoBehaviour
         checkInput();
         ApplyMotor();
         ApplySteering(); 
-        //ApplyWheelRotation();
+        ApplyWheelRotation();
     }
 
     void checkInput() 
