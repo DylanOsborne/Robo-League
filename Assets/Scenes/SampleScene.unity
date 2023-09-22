@@ -183,7 +183,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 0.5
   m_Enabled: 1
 --- !u!1 &135125245
 GameObject:
@@ -391,6 +391,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -464,6 +465,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ffbce2daf858c74aadf26e8e79af665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 2113266952}
+  Offset: {x: 0, y: 2, z: 0}
+  speed: 2
 --- !u!23 &1120112228 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6015145314412560196, guid: 08de242598bd37a43ae96685d8c9659f, type: 3}
@@ -596,7 +612,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 0.5
   m_Enabled: 1
 --- !u!1 &1517989853 stripped
 GameObject:
@@ -1114,8 +1130,10 @@ MonoBehaviour:
     BRWheel: {fileID: 1632376935}
     BLWheel: {fileID: 659333181}
   gasInput: 0
+  brakeInput: 0
   steeringInput: 0
-  motorPower: 500
+  motorPower: 250
+  brakePower: 50000
   steeringCurve:
     serializedVersion: 2
     m_Curve:
