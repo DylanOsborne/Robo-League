@@ -183,7 +183,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 0.5
+    m_Stiffness: 1
   m_Enabled: 1
 --- !u!1 &135125245
 GameObject:
@@ -239,13 +239,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 2
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 2
+    m_Stiffness: 1
   m_Enabled: 1
 --- !u!23 &659333181 stripped
 MeshRenderer:
@@ -478,7 +478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2113266952}
-  Offset: {x: 0, y: 2, z: 0}
+  Offset: {x: 0.8, y: 3, z: 16}
   speed: 2
 --- !u!23 &1120112228 stripped
 MeshRenderer:
@@ -612,7 +612,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 0.5
+    m_Stiffness: 1
   m_Enabled: 1
 --- !u!1 &1517989853 stripped
 GameObject:
@@ -765,13 +765,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 2
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 2
+    m_Stiffness: 1
   m_Enabled: 1
 --- !u!1001 &2113266947
 PrefabInstance:
@@ -1139,7 +1139,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0.6751951
-      value: 30.234867
+      value: 30.064547
       inSlope: -0.28156513
       outSlope: -0.28156513
       tangentMode: 0
@@ -1147,8 +1147,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.18333331
     - serializedVersion: 3
-      time: 39.95687
-      value: 15.791691
+      time: 40.233856
+      value: 15.091739
       inSlope: -0.052944127
       outSlope: -0.052944127
       tangentMode: 0

@@ -14,7 +14,6 @@ public class CarController : MonoBehaviour
 
     public float motorPower;
     public float brakePower;
-    private float slipAngle;
     private float speed;
     public AnimationCurve steeringCurve;
 
@@ -28,27 +27,17 @@ public class CarController : MonoBehaviour
     void Update()
     {
         speed = rb.velocity.magnitude;
-        checkInput();
+        CheckInput();
         ApplyMotor();
         ApplyBreak();
         ApplySteering(); 
         ApplyWheelRotation();
     }
 
-    void checkInput() 
+    void CheckInput() 
     {
-        gasInput = Input.GetAxis("Vertical") *-1;
+        gasInput = Input.GetAxis("Vertical") * -1;
         steeringInput = Input.GetAxis("Horizontal");
-        slipAngle = Vector3.Angle(transform.forward, rb.velocity-transform.forward);
-
-        if(slipAngle < 120f) {
-            if(gasInput < 0) {
-                brakeInput = Mathf.Abs(gasInput);
-                gasInput = 0;
-            }
-        } else {
-                brakeInput = 0;
-        }
     }
 
     void ApplyMotor()
@@ -63,7 +52,6 @@ public class CarController : MonoBehaviour
     {
         colliders.FRWheel.brakeTorque = brakeInput * brakePower * 0.7f;
         colliders.FLWheel.brakeTorque = brakeInput * brakePower * 0.7f;
-
         colliders.BRWheel.brakeTorque = brakeInput * brakePower * 0.7f;
         colliders.BLWheel.brakeTorque = brakeInput * brakePower * 0.7f;
     }
@@ -71,8 +59,6 @@ public class CarController : MonoBehaviour
     void ApplySteering()
     {
         float steeringAngle = steeringInput * steeringCurve.Evaluate(speed);
-        steeringAngle += Vector3.SignedAngle(transform.forward, rb.velocity + transform.forward, Vector3.up);
-        steeringAngle = Mathf.Clamp(steeringAngle, -90f, 90f);
         colliders.FRWheel.steerAngle = steeringAngle;
         colliders.FLWheel.steerAngle = steeringAngle;
     }
@@ -87,12 +73,9 @@ public class CarController : MonoBehaviour
 
     void UpdateWheel(WheelCollider coll, MeshRenderer wheelMesh)
     {
-        Quaternion quat;
-        Vector3 position;
 
-        coll.GetWorldPose(out position, out quat);
-        wheelMesh.transform.position = position;
-        wheelMesh.transform.rotation = quat;
+        coll.GetWorldPose(out Vector3 position, out Quaternion quat);
+        wheelMesh.transform.SetPositionAndRotation(position, quat);
     }
 }
 

@@ -10,13 +10,11 @@ public class CameraController : MonoBehaviour
     public Vector3 Offset;
     public float speed;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = player.GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void LateUpdate()
     {
         Vector3 playerforward = (rb.velocity + player.transform.forward).normalized;
