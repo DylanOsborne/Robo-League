@@ -7,6 +7,10 @@ public class CarController : MonoBehaviour
     private Rigidbody rb;
     public WheelColliders colliders;
     public WheelMesh wheelMeshes;
+    public Transform groundCheck;
+    public LayerMask groundLayer;
+
+    public float groundCheckRadius;
 
     public float gasInput;
     public float brakeInput;
@@ -15,6 +19,12 @@ public class CarController : MonoBehaviour
     public float motorPower;
     public float brakePower;
     private float speed;
+
+    public float jumpForce;
+
+    public bool canJump = false;
+    public bool secondJump = false;
+
     public AnimationCurve steeringCurve;
 
     // Start is called before the first frame update 
@@ -26,12 +36,44 @@ public class CarController : MonoBehaviour
     // Update is called once per frame 
     void Update()
     {
+        bool isGrounded = GroundCheck();
+
         speed = rb.velocity.magnitude;
         CheckInput();
         ApplyMotor();
         ApplyBreak();
         ApplySteering(); 
         ApplyWheelRotation();
+
+        if (isGrounded)
+        {
+            canJump = true;
+            secondJump = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) && canJump)
+        {
+            Jump();
+            canJump = false;
+        } 
+        else if(Input.GetKeyDown(KeyCode.Space) && secondJump)
+        {
+            Jump();
+            secondJump = false;
+        }
+    }
+
+    void Jump()
+    {
+        // Apply an upward force to the car's Rigidbody
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    bool GroundCheck()
+    {
+        // Cast a sphere from the ground check position to check for ground contact.
+        // Adjust the radius and layer mask according to your car's size and the ground's layer.
+        return Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
     void CheckInput() 
@@ -42,8 +84,6 @@ public class CarController : MonoBehaviour
 
     void ApplyMotor()
     {
-        colliders.FRWheel.motorTorque = motorPower * gasInput;
-        colliders.FLWheel.motorTorque = motorPower * gasInput;
         colliders.BRWheel.motorTorque = motorPower * gasInput;
         colliders.BLWheel.motorTorque = motorPower * gasInput;
     }
@@ -73,7 +113,6 @@ public class CarController : MonoBehaviour
 
     void UpdateWheel(WheelCollider coll, MeshRenderer wheelMesh)
     {
-
         coll.GetWorldPose(out Vector3 position, out Quaternion quat);
         wheelMesh.transform.SetPositionAndRotation(position, quat);
     }

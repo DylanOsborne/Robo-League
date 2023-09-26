@@ -17,8 +17,16 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        Vector3 playerforward = (rb.velocity + player.transform.forward).normalized;
-        transform.position = Vector3.Lerp(transform.position, player.position + player.transform.TransformVector(Offset) + playerforward*(-5f), speed * Time.deltaTime);
+        // Calculate the desired camera position
+        Vector3 desiredPosition = player.position + player.transform.TransformVector(Offset);
+
+        // Apply an additional offset in the direction opposite to the car's forward direction
+        desiredPosition -= player.forward * 2f;
+
+        // Use Lerp to smoothly interpolate between the current camera position and the desired position
+        transform.position = Vector3.Lerp(transform.position, desiredPosition, speed * Time.deltaTime);
+
+        // Make the camera look at the car
         transform.LookAt(player);
     }
 }
