@@ -18,12 +18,12 @@ public class CarController : MonoBehaviour
 
     public float motorPower;
     public float brakePower;
-    private float speed;
+    public float speed;
 
     public float jumpForce;
-
-    public bool canJump = false;
     public bool secondJump = false;
+
+    public string direction;
 
     public AnimationCurve steeringCurve;
 
@@ -36,27 +36,26 @@ public class CarController : MonoBehaviour
     // Update is called once per frame 
     void Update()
     {
-        bool isGrounded = GroundCheck();
-
         speed = rb.velocity.magnitude;
+
         CheckInput();
         ApplyMotor();
         ApplyBreak();
         ApplySteering(); 
         ApplyWheelRotation();
 
+        bool isGrounded = GroundCheck();
+
         if (isGrounded)
         {
-            canJump = true;
             secondJump = true;
-        }
 
-        if (Input.GetKeyDown(KeyCode.Space) && canJump)
-        {
-            Jump();
-            canJump = false;
-        } 
-        else if(Input.GetKeyDown(KeyCode.Space) && secondJump)
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Jump();
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) && secondJump)
         {
             Jump();
             secondJump = false;
@@ -78,8 +77,45 @@ public class CarController : MonoBehaviour
 
     void CheckInput() 
     {
-        gasInput = Input.GetAxis("Vertical") * -1;
-        steeringInput = Input.GetAxis("Horizontal");
+        gasInput = 0;
+        steeringInput = 0;
+        
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            if(direction == "R" && speed > 1)
+            {
+                brakeInput = 1;
+            } 
+            else
+            {
+                brakeInput = 0;
+                direction = "F";
+                gasInput = -1;
+            }
+        }
+        else if(Input.GetKey(KeyCode.S))
+        {
+            if(direction == "F" && speed > 1)
+            {
+                brakeInput = 1;
+            }
+            else
+            {
+                brakeInput = 0;
+                direction = "R";
+                gasInput = 1;
+            }
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            steeringInput = -1;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            steeringInput = 1;
+        }
     }
 
     void ApplyMotor()
@@ -92,8 +128,9 @@ public class CarController : MonoBehaviour
     {
         colliders.FRWheel.brakeTorque = brakeInput * brakePower * 0.7f;
         colliders.FLWheel.brakeTorque = brakeInput * brakePower * 0.7f;
-        colliders.BRWheel.brakeTorque = brakeInput * brakePower * 0.7f;
-        colliders.BLWheel.brakeTorque = brakeInput * brakePower * 0.7f;
+
+        colliders.BRWheel.brakeTorque = brakeInput * brakePower * 0.3f;
+        colliders.BLWheel.brakeTorque = brakeInput * brakePower * 0.3f;
     }
 
     void ApplySteering()
