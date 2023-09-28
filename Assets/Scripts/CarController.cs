@@ -12,28 +12,29 @@ public class CarController : MonoBehaviour
 
     public float groundCheckRadius;
 
-    public float gasInput;
-    public float brakeInput;
-    public float steeringInput;
+    private float gasInput;
+    private float brakeInput;
+    private float steeringInput;
 
     public float motorPower;
     public float brakePower;
-    public float speed;
+    private float speed;
 
     public float jumpForce;
-    public bool secondJump = false;
+    private bool secondJump = false;
 
     public string direction;
 
+    private float bankAngle = 360f;
+    private float bankSpeed = 2f;
+
     public AnimationCurve steeringCurve;
 
-    // Start is called before the first frame update 
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame 
     void Update()
     {
         speed = rb.velocity.magnitude;
@@ -45,6 +46,20 @@ public class CarController : MonoBehaviour
         ApplyWheelRotation();
 
         bool isGrounded = GroundCheck();
+
+        if (!isGrounded)
+        {
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+            if (Input.GetKey(KeyCode.Q))
+            {
+                AirRoll(1);
+            }
+            else if (Input.GetKey(KeyCode.E))
+            {
+                AirRoll(2);
+            }
+        }
 
         if (isGrounded)
         {
@@ -64,14 +79,30 @@ public class CarController : MonoBehaviour
 
     void Jump()
     {
-        // Apply an upward force to the car's Rigidbody
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    void AirRoll(int side)
+    {
+        float bankAmount = 0f;
+
+        rb.constraints = RigidbodyConstraints.None;
+
+        if (side == 1)
+        {
+            bankAmount = -bankAngle;
+        }
+        else if (side == 2)
+        {
+            bankAmount = bankAngle;
+        }
+
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, bankAmount);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * bankSpeed);
     }
 
     bool GroundCheck()
     {
-        // Cast a sphere from the ground check position to check for ground contact.
-        // Adjust the radius and layer mask according to your car's size and the ground's layer.
         return Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
