@@ -25,8 +25,9 @@ public class CarController : MonoBehaviour
 
     public string direction;
 
-    private float bankAngle = 360f;
-    private float bankSpeed = 2f;
+    private readonly float bankAngle = 360f;
+    public readonly float bankSpeed = 25f;
+    private readonly float airTurnSpeed = 70f;
 
     public AnimationCurve steeringCurve;
 
@@ -59,10 +60,30 @@ public class CarController : MonoBehaviour
             {
                 AirRoll(2);
             }
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                Vector3 rotationTorque = -1 * airTurnSpeed * Vector3.up;
+
+                rb.AddTorque(rotationTorque);
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                Vector3 rotationTorque = 1 * airTurnSpeed * Vector3.up;
+
+                rb.AddTorque(rotationTorque);
+            }
+
+            if (!Input.GetKey(KeyCode.Q) && !Input.GetKey(KeyCode.E) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            {
+                rb.angularVelocity = Vector3.zero;
+            }
         }
 
         if (isGrounded)
         {
+            rb.constraints = RigidbodyConstraints.FreezeRotationX;
+
             secondJump = true;
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -84,9 +105,9 @@ public class CarController : MonoBehaviour
 
     void AirRoll(int side)
     {
-        float bankAmount = 0f;
+        rb.constraints = RigidbodyConstraints.FreezeRotationX;
 
-        rb.constraints = RigidbodyConstraints.None;
+        float bankAmount = 0f;
 
         if (side == 1)
         {
@@ -97,8 +118,9 @@ public class CarController : MonoBehaviour
             bankAmount = bankAngle;
         }
 
-        Quaternion targetRotation = Quaternion.Euler(0f, 0f, bankAmount);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * bankSpeed);
+        Vector3 rotationTorque = bankAmount * bankSpeed * transform.forward;
+
+        rb.AddTorque(rotationTorque);
     }
 
     bool GroundCheck()
