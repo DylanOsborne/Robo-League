@@ -80,6 +80,12 @@ public class CarController : MonoBehaviour
             }
         }
 
+        if (gasInput == 0f && brakeInput == 0f && steeringInput == 0f)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+
         if (isGrounded)
         {
             rb.constraints = RigidbodyConstraints.FreezeRotationX;

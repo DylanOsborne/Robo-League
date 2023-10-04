@@ -581,8 +581,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1354649183}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.778, y: 1.091, z: 7.479}
-  m_LocalScale: {x: 0.7, y: 0, z: 1.5}
+  m_LocalPosition: {x: 0.778, y: 1.092, z: 7.502}
+  m_LocalScale: {x: 0.93500006, y: 0.14470312, z: 1.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2113266952}
@@ -675,7 +675,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1517989853}
-  m_Material: {fileID: 13400000, guid: 700540841adac0945b460d1519af7c5d, type: 2}
+  m_Material: {fileID: 13400000, guid: 4a367b6dce9d5ff409a54d9b8d4d4978, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -1186,7 +1186,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 1024
-  groundCheckRadius: 0.1
+  groundCheckRadius: 0.25
   motorPower: 2000
   brakePower: 55000
   jumpForce: 5000
