@@ -22,6 +22,7 @@ public class CarController : MonoBehaviour
 
     public float jumpForce;
     private bool secondJump = false;
+    public bool grounded = false;
 
     public string direction;
 
@@ -38,6 +39,8 @@ public class CarController : MonoBehaviour
 
     void Update()
     {
+        rb.constraints = RigidbodyConstraints.None;
+        grounded = false;
         speed = rb.velocity.magnitude;
 
         CheckInput();
@@ -45,12 +48,11 @@ public class CarController : MonoBehaviour
         ApplyBreak();
         ApplySteering(); 
         ApplyWheelRotation();
+        GroundCheck();
 
-        bool isGrounded = GroundCheck();
-
-        if (!isGrounded)
+        if (!grounded)
         {
-            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+            rb.constraints = RigidbodyConstraints.FreezeRotationZ;
 
             if (Input.GetKey(KeyCode.Q))
             {
@@ -80,16 +82,14 @@ public class CarController : MonoBehaviour
             }
         }
 
-        if (gasInput == 0f && brakeInput == 0f && steeringInput == 0f)
+        /*if (gasInput == 0f && brakeInput == 0f && steeringInput == 0f)
         {
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-        }
+        }*/
 
-        if (isGrounded)
+        if (grounded)
         {
-            rb.constraints = RigidbodyConstraints.FreezeRotationX;
-
             secondJump = true;
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -106,12 +106,13 @@ public class CarController : MonoBehaviour
 
     void Jump()
     {
+        rb.constraints = RigidbodyConstraints.FreezeRotationZ;
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     void AirRoll(int side)
     {
-        rb.constraints = RigidbodyConstraints.FreezeRotationX;
+        rb.constraints = RigidbodyConstraints.None;
 
         float bankAmount = 0f;
 
@@ -129,9 +130,9 @@ public class CarController : MonoBehaviour
         rb.AddTorque(rotationTorque);
     }
 
-    bool GroundCheck()
+    void GroundCheck()
     {
-        return Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
+        grounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
     void CheckInput() 
