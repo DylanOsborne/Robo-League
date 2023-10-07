@@ -3,7 +3,27 @@ guid: 44ad8195078d39b4db0c60c479b7e34d
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Edges
+    second: {fileID: 2100000, guid: 3d9a2640e4fd2e546829a8669533db79, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Goal
+    second: {fileID: 2100000, guid: 6cdc559686feb0d49b1a4f4d0a8fa391, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Goal Line
+    second: {fileID: 2100000, guid: c0741b53d8b8e2e44b832f0690a8b19c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Walls
+    second: {fileID: 2100000, guid: 871822ad699b90a40aae9d9f362d59f3, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
