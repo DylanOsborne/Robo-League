@@ -22,13 +22,13 @@ public class CarController : MonoBehaviour
 
     public float jumpForce;
     private bool secondJump = false;
-    public bool grounded = false;
+    public bool grounded = false; // Indicates whether the car is grounded or in the air
 
-    public string direction;
+    public string direction; // Tracks the car's direction
 
     private readonly float bankAngle = 360f;
     public readonly float bankSpeed = 25f;
-    private readonly float airTurnSpeed = 70f;
+    private readonly float airTurnSpeed = 1000f; // Torque applied for air control
 
     public AnimationCurve steeringCurve;
 
@@ -39,124 +39,136 @@ public class CarController : MonoBehaviour
 
     void Update()
     {
-        rb.constraints = RigidbodyConstraints.None;
-        grounded = false;
+
+        grounded = false; // Reset grounded status
         speed = rb.velocity.magnitude;
 
-        CheckInput();
-        ApplyMotor();
-        ApplyBreak();
-        ApplySteering(); 
-        ApplyWheelRotation();
-        GroundCheck();
+        CheckInput(); // Check user input
+        ApplyMotor(); // Apply motor torque to wheels
+        ApplyBreak(); // Apply braking force to wheels
+        ApplySteering(); // Apply steering angle to front wheels
+        ApplyWheelRotation(); // Update wheel rotation
+        GroundCheck(); // Check if the car is grounded
 
-        if (!grounded)
+        if (!grounded) // Car is in the air
         {
-            rb.constraints = RigidbodyConstraints.FreezeRotationZ;
+            AirControl(); // Control the car's orientation in the air
 
-            if (Input.GetKey(KeyCode.Q))
-            {
-                AirRoll(1);
-            }
-            else if (Input.GetKey(KeyCode.E))
-            {
-                AirRoll(2);
-            }
-
-            if (Input.GetKey(KeyCode.A))
-            {
-                Vector3 rotationTorque = -1 * airTurnSpeed * Vector3.up;
-
-                rb.AddTorque(rotationTorque);
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                Vector3 rotationTorque = 1 * airTurnSpeed * Vector3.up;
-
-                rb.AddTorque(rotationTorque);
-            }
+            AirRoll(); // Perform an air roll
 
             if (!Input.GetKey(KeyCode.Q) && !Input.GetKey(KeyCode.E) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             {
-                rb.angularVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero; // Stop angular velocity when no keys are pressed
             }
         }
 
-        /*if (gasInput == 0f && brakeInput == 0f && steeringInput == 0f)
-        {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }*/
-
-        if (grounded)
+        if (grounded) // Car is on the ground
         {
             secondJump = true;
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                Jump();
+                Jump(); // Perform a jump when the Space key is pressed
             }
         }
         else if (Input.GetKeyDown(KeyCode.Space) && secondJump)
         {
-            Jump();
+            Jump(); // Perform a jump in the air if the second jump is available
             secondJump = false;
         }
     }
 
     void Jump()
     {
-        rb.constraints = RigidbodyConstraints.FreezeRotationZ;
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        // Calculate the jump direction as the negative of the car's current up direction
+        Vector3 jumpDirection = transform.up;
+
+        rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
     }
 
-    void AirRoll(int side)
+    void AirControl()
     {
-        rb.constraints = RigidbodyConstraints.None;
-
-        float bankAmount = 0f;
-
-        if (side == 1)
+        if (Input.GetKey(KeyCode.W))
         {
-            bankAmount = -bankAngle;
+            // Apply torque to rotate the car forward (pitch)
+            Vector3 rotationTorque = -airTurnSpeed * Vector3.right;
+            rb.AddTorque(rotationTorque);
         }
-        else if (side == 2)
+        else if (Input.GetKey(KeyCode.S))
         {
-            bankAmount = bankAngle;
+            // Apply torque to rotate the car backward (pitch)
+            Vector3 rotationTorque = airTurnSpeed * Vector3.right;
+            rb.AddTorque(rotationTorque);
         }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            // Apply torque to rotate the car left (yaw)
+            Vector3 rotationTorque = -airTurnSpeed * Vector3.up;
+            rb.AddTorque(rotationTorque);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            // Apply torque to rotate the car right (yaw)
+            Vector3 rotationTorque = airTurnSpeed * Vector3.up;
+            rb.AddTorque(rotationTorque);
+        }
+        else
+        {
+            rb.angularVelocity = Vector3.zero; // When nothing pressed, stop angular velocity
+        }
+    }
 
-        Vector3 rotationTorque = bankAmount * bankSpeed * transform.forward;
+    void AirRoll()
+    {
+        if (Input.GetKey(KeyCode.Q)) // Perform an air roll to the left
+        {
+            float bankAmount = -bankAngle;
 
-        rb.AddTorque(rotationTorque);
+            Vector3 rotationTorque = bankAmount * bankSpeed * transform.forward;
+
+            rb.AddTorque(rotationTorque);
+        }
+        else if (Input.GetKey(KeyCode.E)) // Perform an air roll to the right
+        {
+            float bankAmount = bankAngle;
+
+            Vector3 rotationTorque = bankAmount * bankSpeed * transform.forward;
+
+            rb.AddTorque(rotationTorque);
+        }
+        else
+        {
+            rb.angularVelocity = Vector3.zero; // When nothing pressed, stop angular velocity
+        }
     }
 
     void GroundCheck()
     {
-        grounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
+        grounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer); // Check if the car is grounded
     }
 
-    void CheckInput() 
+    void CheckInput()
     {
         gasInput = 0;
         steeringInput = 0;
-        
+
 
         if (Input.GetKey(KeyCode.W))
         {
-            if(direction == "R" && speed > 1)
+            if (direction == "R" && speed > 1)
             {
                 brakeInput = 1;
-            } 
+            }
             else
             {
                 brakeInput = 0;
                 direction = "F";
-                gasInput = -1;
+                gasInput = -1; // Apply gas to move forward
             }
         }
-        else if(Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S))
         {
-            if(direction == "F" && speed > 1)
+            if (direction == "F" && speed > 1)
             {
                 brakeInput = 1;
             }
@@ -164,17 +176,17 @@ public class CarController : MonoBehaviour
             {
                 brakeInput = 0;
                 direction = "R";
-                gasInput = 1;
+                gasInput = 1; // Apply gas to move backward
             }
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            steeringInput = -1;
+            steeringInput = -1; // Steer left
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            steeringInput = 1;
+            steeringInput = 1; // Steer right
         }
     }
 
@@ -216,7 +228,7 @@ public class CarController : MonoBehaviour
 }
 
 [System.Serializable]
-public class WheelColliders 
+public class WheelColliders
 {
     public WheelCollider FRWheel;
     public WheelCollider FLWheel;
@@ -226,7 +238,7 @@ public class WheelColliders
 
 [System.Serializable]
 public class WheelMesh
-{ 
+{
     public MeshRenderer FRWheel;
     public MeshRenderer FLWheel;
     public MeshRenderer BRWheel;
