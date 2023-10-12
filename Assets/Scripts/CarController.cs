@@ -28,7 +28,7 @@ public class CarController : MonoBehaviour
 
     private readonly float bankAngle = 360f;
     public readonly float bankSpeed = 25f;
-    private readonly float airTurnSpeed = 1000f; // Torque applied for air control
+    private readonly float airTurnSpeed = 10f; // Torque applied for air control
 
     public AnimationCurve steeringCurve;
 
@@ -91,25 +91,25 @@ public class CarController : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             // Apply torque to rotate the car forward (pitch)
-            Vector3 rotationTorque = -airTurnSpeed * Vector3.right;
+            Vector3 rotationTorque = -bankAngle * airTurnSpeed * transform.right;
             rb.AddTorque(rotationTorque);
         }
         else if (Input.GetKey(KeyCode.S))
         {
             // Apply torque to rotate the car backward (pitch)
-            Vector3 rotationTorque = airTurnSpeed * Vector3.right;
+            Vector3 rotationTorque = bankAngle * airTurnSpeed * transform.right;
             rb.AddTorque(rotationTorque);
         }
         else if (Input.GetKey(KeyCode.A))
         {
             // Apply torque to rotate the car left (yaw)
-            Vector3 rotationTorque = -airTurnSpeed * Vector3.up;
+            Vector3 rotationTorque = -bankAngle * airTurnSpeed * transform.up;
             rb.AddTorque(rotationTorque);
         }
         else if (Input.GetKey(KeyCode.D))
         {
             // Apply torque to rotate the car right (yaw)
-            Vector3 rotationTorque = airTurnSpeed * Vector3.up;
+            Vector3 rotationTorque = bankAngle * airTurnSpeed * transform.up;
             rb.AddTorque(rotationTorque);
         }
         else
@@ -122,17 +122,13 @@ public class CarController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Q)) // Perform an air roll to the left
         {
-            float bankAmount = -bankAngle;
-
-            Vector3 rotationTorque = bankAmount * bankSpeed * transform.forward;
+            Vector3 rotationTorque = -bankAngle * bankSpeed * transform.forward;
 
             rb.AddTorque(rotationTorque);
         }
         else if (Input.GetKey(KeyCode.E)) // Perform an air roll to the right
         {
-            float bankAmount = bankAngle;
-
-            Vector3 rotationTorque = bankAmount * bankSpeed * transform.forward;
+            Vector3 rotationTorque = bankAngle * bankSpeed * transform.forward;
 
             rb.AddTorque(rotationTorque);
         }
