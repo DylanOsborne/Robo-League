@@ -5,28 +5,40 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform player;
-    private Rigidbody rb;
-    public Vector3 Offset;
-    public float speed;
+    public Transform car; // Reference to the car
+    public Transform ball; // Reference to the ball
+    public Vector3 offset; // Offset relative to the car
+
+    public float minFOV = 60.0f; // Minimum FOV
+    public float maxFOV = 90.0f; // Maximum FOV
+    public float zoomSpeed = 10.0f; // Camera zoom speed
+    public float followSpeed = 5.0f; // Camera follow speed
+
+    private Camera cam;
 
     void Start()
     {
-        rb = player.GetComponent<Rigidbody>();
+        cam = GetComponent<Camera>();
     }
 
     void LateUpdate()
     {
-        // Calculate the desired camera position
-        Vector3 desiredPosition = player.position + player.transform.TransformVector(Offset);
+        // Calculate the desired camera position relative to the car
+        Vector3 desiredPosition = car.position + car.TransformDirection(offset);
 
-        // Apply an additional offset in the direction opposite to the car's forward direction
-        desiredPosition -= player.forward * 2f;
+        // Calculate direction from the car to the ball
+        Vector3 directionToBall = ball.position - car.position;
 
-        // Use Lerp to smoothly interpolate between the current camera position and the desired position
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, speed * Time.deltaTime);
+        // Calculate the desired FOV based on the distance to the ball
+        float desiredFOV = Mathf.Clamp(directionToBall.magnitude, minFOV, maxFOV);
 
-        // Make the camera look at the car
-        transform.LookAt(player);
+        // Smoothly adjust the camera's FOV
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, desiredFOV, Time.deltaTime * zoomSpeed);
+
+        // Update the camera's position using Lerp
+        transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * followSpeed);
+
+        // Make the camera constantly look at the ball
+        transform.LookAt(ball.position);
     }
 }
