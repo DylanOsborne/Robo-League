@@ -9,10 +9,13 @@ public class CameraController : MonoBehaviour
     // The empty GameObject that controls camera rotation (parented to the car)
     public Transform cameraPos;
 
-    public float minFOV = 60.0f; // Minimum FOV
-    public float maxFOV = 90.0f; // Maximum FOV
-    public float zoomSpeed = 10.0f; // Camera zoom speed
-    public float followSpeed = 5.0f; // Camera follow speed
+    // Reference to the front parts of the car
+    public Transform CarFrontPos;
+    public Transform CarFrontCam;
+
+    private readonly float minFOV = 60.0f; // Minimum FOV
+    private readonly float maxFOV = 90.0f; // Maximum FOV
+    private readonly float zoomSpeed = 10.0f; // Camera zoom speed
 
     private bool ballCam = true; // Whether or not ball cam is enabled
 
@@ -30,7 +33,7 @@ public class CameraController : MonoBehaviour
         float width = (float)(Screen.width - (Screen.width * 0.9)); // Setting the derired width placement for the text
         float height = (float)(Screen.height - (Screen.height * 0.9)); // Setting the derired height placement for the text
 
-        Vector3 newPos = new Vector3(width, height, 0); // Creating new vector for derired text placement
+        Vector3 newPos = new(width, height, 0); // Creating new vector for derired text placement
 
         textElement.transform.position = newPos; // Updating the text positioning
     }
@@ -44,36 +47,30 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-
         if(ballCam)
         {
             // Make the camera and cameraPos look at the ball
             cam.transform.LookAt(ball);
             cameraPos.transform.LookAt(ball);
 
-            // Calculate the direction from the car to the ball
-            Vector3 directionToBall = ball.position - car.position;
-
-            // Calculate the desired FOV based on the distance to the ball
-            float desiredFOV = Mathf.Clamp(directionToBall.magnitude, minFOV, maxFOV);
-
-            // Smoothly adjust the camera's FOV
-            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, desiredFOV, Time.deltaTime * zoomSpeed);
-
             textValue = "Ball Cam On";
         }
         else
         {
-            // Calculate the direction from the car to the ball
-            Vector3 directionToBall = ball.position - car.position;
-
-            // Calculate the desired FOV based on the distance to the ball
-            float desiredFOV = Mathf.Clamp(directionToBall.magnitude, minFOV, maxFOV);
-
-            // Smoothly adjust the camera's FOV
-            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, desiredFOV, Time.deltaTime * zoomSpeed);
+            // Make the camera and cameraPos look at the front sections of the car
+            cam.transform.LookAt(CarFrontCam);
+            cameraPos.transform.LookAt(CarFrontPos);
 
             textValue = "Ball Cam Off";
         }
+
+        // Calculate the direction from the car to the ball
+        Vector3 directionToBall = ball.position - car.position;
+
+        // Calculate the desired FOV based on the distance to the ball
+        float desiredFOV = Mathf.Clamp(directionToBall.magnitude, minFOV, maxFOV);
+
+        // Smoothly adjust the camera's FOV
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, desiredFOV, Time.deltaTime * zoomSpeed);
     }
 }
