@@ -10,25 +10,28 @@ public class CarController : MonoBehaviour
     public Transform groundCheck;
     public LayerMask groundLayer;
 
-    public float groundCheckRadius;
+    private readonly float groundCheckRadius = 0.25f;
 
-    private float gasInput;
-    private float brakeInput;
+    public float gasInput;
+    public float brakeInput;
     private float steeringInput;
 
-    public float motorPower;
-    public float brakePower;
-    private float speed;
+    private readonly float motorPower = 2000f;
+    private readonly float brakePower = 55000f;
+    public float speed;
 
-    public float jumpForce;
+    private readonly float jumpForce = 5000f;
     private bool secondJump = false;
-    public bool grounded = false; // Indicates whether the car is grounded or in the air
+    private bool grounded = false; // Indicates whether the car is grounded or in the air
 
-    public string direction; // Tracks the car's direction
+    private string direction; // Tracks the car's direction
 
     private readonly float bankAngle = 360f;
-    public readonly float bankSpeed = 25f;
+    private readonly float bankSpeed = 25f;
     private readonly float airTurnSpeed = 10f; // Torque applied for air control
+
+    public float decelerationForce = 10.0f; // Force to get the car to come to a stop
+    public float brakeSpeedThreshold = 1.0f; // Threshold to where the car must stop completely
 
     public AnimationCurve steeringCurve;
 
@@ -190,6 +193,21 @@ public class CarController : MonoBehaviour
     {
         colliders.BRWheel.motorTorque = motorPower * gasInput;
         colliders.BLWheel.motorTorque = motorPower * gasInput;
+
+        if (gasInput == 0 && brakeInput == 0)
+        {
+            // Apply deceleration force to slow down the car when no input is given
+            rb.AddForce(-rb.velocity * decelerationForce);
+
+            if (speed < brakeSpeedThreshold)
+            {
+                // Calculate the force needed to stop the car (opposite to its current velocity)
+                Vector3 stopForce = 10 * decelerationForce * -rb.velocity;
+
+                // Apply the stopping force
+                rb.AddForce(stopForce, ForceMode.Force);
+            }
+        }
     }
 
     void ApplyBreak()

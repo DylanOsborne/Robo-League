@@ -1057,12 +1057,11 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 1024
-  groundCheckRadius: 0.25
-  motorPower: 2000
-  brakePower: 55000
-  jumpForce: 5000
-  grounded: 0
-  direction: 
+  gasInput: 0
+  brakeInput: 0
+  speed: 0
+  decelerationForce: 250
+  brakeSpeedThreshold: 2
   steeringCurve:
     serializedVersion: 2
     m_Curve:
