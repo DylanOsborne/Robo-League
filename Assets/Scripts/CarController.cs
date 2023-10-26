@@ -65,7 +65,7 @@ public class CarController : MonoBehaviour
             }
         }
 
-        if (grounded) // Car is on the ground
+        if (grounded) // Car is grounded
         {
             secondJump = true;
 
@@ -76,7 +76,15 @@ public class CarController : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space) && secondJump)
         {
-            Jump(); // Perform a jump in the air if the second jump is available
+            if (Input.GetKey(KeyCode.W)) // Only perform flip if W is held
+            {
+                ForwardFlip(); // Perform a forward flip
+            }
+            else
+            {
+                Jump(); // Perform a regular jump in the air
+            }
+
             secondJump = false;
         }
     }
@@ -85,8 +93,22 @@ public class CarController : MonoBehaviour
     {
         // Calculate the jump direction as the negative of the car's current up direction
         Vector3 jumpDirection = transform.up;
-
         rb.AddForce(jumpDirection * jumpForce, ForceMode.Impulse);
+    }
+
+    void ForwardFlip()
+    {
+        // Apply torque to perform an extreme forward flip
+        Vector3 rotationTorque = -bankAngle * airTurnSpeed * transform.right * 200;
+        rb.AddTorque(rotationTorque);
+
+        // Apply forward force to shoot the car forward
+        Vector3 forwardForce = -2f * jumpForce/2 * transform.forward;
+        rb.AddForce(forwardForce, ForceMode.Impulse);
+
+        // Tilt the front down and the back up
+        Vector3 tiltTorque = bankAngle * airTurnSpeed * transform.forward * 200;
+        rb.AddTorque(tiltTorque);
     }
 
     void AirControl()
@@ -194,7 +216,7 @@ public class CarController : MonoBehaviour
         colliders.BRWheel.motorTorque = motorPower * gasInput;
         colliders.BLWheel.motorTorque = motorPower * gasInput;
 
-        if (gasInput == 0 && brakeInput == 0)
+        if (gasInput == 0 && brakeInput == 0 && grounded)
         {
             // Apply deceleration force to slow down the car when no input is given
             rb.AddForce(-rb.velocity * decelerationForce);
