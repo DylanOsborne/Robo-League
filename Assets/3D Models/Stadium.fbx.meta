@@ -7,23 +7,73 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Edges
-    second: {fileID: 2100000, guid: 3d9a2640e4fd2e546829a8669533db79, type: 2}
+      name: Black Lines
+    second: {fileID: 2100000, guid: 6f3d52ae0e5e91845aa39eb5dbd6fd11, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Goal
-    second: {fileID: 2100000, guid: 6cdc559686feb0d49b1a4f4d0a8fa391, type: 2}
+      name: Blue Lights
+    second: {fileID: 2100000, guid: 12dbdccce4bda964a9da0f0d6a277dfa, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Goal Line
-    second: {fileID: 2100000, guid: c0741b53d8b8e2e44b832f0690a8b19c, type: 2}
+      name: Blue Side
+    second: {fileID: 2100000, guid: 230d3eb830b17d941b2f7e6bf6b086df, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Walls
-    second: {fileID: 2100000, guid: 871822ad699b90a40aae9d9f362d59f3, type: 2}
+      name: Blue Side 2
+    second: {fileID: 2100000, guid: d100ae507ff4ca34dafdbcd483c16bb1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Blue Side 3
+    second: {fileID: 2100000, guid: 2b6507f2fa60a394594cae52e9962833, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Blue Side 4
+    second: {fileID: 2100000, guid: 624ec5c63397fe4438a768e2735dd42a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Grass
+    second: {fileID: 2100000, guid: 07421dbb65c2d0a4194c24fa590dfe47, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Red Lights
+    second: {fileID: 2100000, guid: 67d9a42bc95d6f14d9425d8931a5b7ef, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Red Side
+    second: {fileID: 2100000, guid: e6bee9a7aae81e14587ee160ba5e1034, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Red Side 2
+    second: {fileID: 2100000, guid: afad54427d3e70b42b4b588d30857d32, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Red Side 3
+    second: {fileID: 2100000, guid: 77e5d96045bfc734b860e98ed7ec080e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Red Side 4
+    second: {fileID: 2100000, guid: 3bd9623bc4dcd5540895de92f15d1a75, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: White Lights
+    second: {fileID: 2100000, guid: ecd17f10927d4e24bb415fabf79552a4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: White Lines
+    second: {fileID: 2100000, guid: f2b738ff333eb914ab8f4291274494b5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -89,7 +139,7 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 0
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
