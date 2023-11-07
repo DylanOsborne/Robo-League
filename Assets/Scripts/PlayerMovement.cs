@@ -12,7 +12,9 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    bool readyToJump = true;
+    public bool secondJump;
+
+    public float customGravity = -20f;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
@@ -21,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
-    bool grounded = true;
+    public bool grounded;
 
     public Transform orientation;
 
@@ -40,40 +42,46 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-
+        grounded = CheckGrounded();
         SetInput();
         SpeedControl();
 
-        // Handle Drag
         if (grounded)
         {
+            secondJump = true;
+
             rb.drag = groundDrag;
+
+            if (Input.GetKeyDown(jumpKey))
+            {
+                Jump();
+            }
         } 
         else if(!grounded)
         {
             rb.drag = 0;
+
+            if (Input.GetKeyDown(jumpKey) && secondJump == true)
+            {
+                secondJump = false;
+
+                Jump();
+            }
         }
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
+
+        // Apply custom gravity to the character
+        rb.AddForce(Vector3.up * customGravity, ForceMode.Acceleration);
     }
 
     private void SetInput()
     {
         horzontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-
-        // when to jump
-        if(Input.GetKey(jumpKey) && readyToJump && grounded)
-        {
-            readyToJump = false;
-
-            Jump();
-
-            Invoke(nameof(ResetJump), jumpCooldown);
-        }
     }
 
     private void MovePlayer()
@@ -93,15 +101,15 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
-    private void CheckGrounded()
+    private bool CheckGrounded()
     {
         // Use a sphere cast to check if the player is grounded
-        grounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
+        return Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
     private void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        Vector3 flatVel = new(rb.velocity.x, 0f, rb.velocity.z);
 
         // Limit velocity if needed
         if(flatVel.magnitude > moveSpeed)
@@ -117,10 +125,5 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-    }
-
-    private void ResetJump()
-    {
-        readyToJump = true;
     }
 }
