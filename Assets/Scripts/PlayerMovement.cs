@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Body Parts")]
+    public Transform head;
+    public Transform hands;
+    public Transform feet;
+
     [Header("Movement")]
     public float moveSpeed;
 
@@ -124,6 +129,11 @@ public class PlayerMovement : MonoBehaviour
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
+
+    private void Punch()
+    {
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 }
