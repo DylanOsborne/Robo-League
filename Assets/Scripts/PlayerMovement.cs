@@ -23,6 +23,10 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
+    public KeyCode punchKey = KeyCode.Mouse0;
+    public KeyCode kickKey = KeyCode.Mouse1;
+    public KeyCode headerKey = KeyCode.Mouse2;
+    public KeyCode walkKey = KeyCode.W;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -39,10 +43,13 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
+    public Animator animator;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -61,8 +68,19 @@ public class PlayerMovement : MonoBehaviour
             {
                 Jump();
             }
+
+            if (Input.GetKey(walkKey))
+            {
+                animator.SetBool("walking", true);
+            } 
+            else
+            {
+                animator.SetBool("walking", false);
+            }
+
+            animator.SetBool("jump", false);
         } 
-        else if(!grounded)
+        else if (!grounded)
         {
             rb.drag = 0;
 
@@ -72,6 +90,21 @@ public class PlayerMovement : MonoBehaviour
 
                 Jump();
             }
+        }
+
+        if (Input.GetKeyDown(punchKey))
+        {
+            Punch();
+        } 
+        
+        if (Input.GetKeyDown(kickKey))
+        {
+            Kick();
+        } 
+        
+        if (Input.GetKeyDown(headerKey))
+        {
+            Header();
         }
     }
 
@@ -91,6 +124,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+
         // Calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horzontalInput;
 
@@ -130,10 +164,41 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+        animator.SetBool("jump", true);
     }
 
     private void Punch()
     {
+        animator.SetBool("punch", true);
+
+        Invoke("ResetPunch", 0.417f);
+
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
+
+    private void Kick()
+    {
+        animator.SetBool("kick", true);
+
+        Invoke("ResetKick", 0.417f);
+
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
+
+    private void Header()
+    {
+        animator.SetBool("header", true);
+
+        Invoke("ResetHeader", 0.417f);
+
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
+
+
+    // Methods to reset the action parameters
+    private void ResetPunch(){ animator.SetBool("punch", false); }
+    private void ResetKick() { animator.SetBool("kick", false); }
+    private void ResetHeader() { animator.SetBool("header", false); }
+
 }
