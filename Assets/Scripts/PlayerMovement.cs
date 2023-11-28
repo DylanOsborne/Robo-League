@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Body Parts")]
-    public Transform head;
-    public Transform hands;
-    public Transform feet;
-
     [Header("Movement")]
     public float moveSpeed;
 
@@ -58,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
         SetInput();
         SpeedControl();
 
+        animator.SetBool("grounded", grounded);
+
         if (grounded)
         {
             secondJump = true;
@@ -77,8 +74,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 animator.SetBool("walking", false);
             }
-
-            animator.SetBool("jump", false);
         } 
         else if (!grounded)
         {
@@ -165,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
 
-        animator.SetBool("jump", true);
+        animator.SetTrigger("jump");
     }
 
     private void Punch()
@@ -173,8 +168,6 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("punch", true);
 
         Invoke("ResetPunch", 0.417f);
-
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
     private void Kick()
@@ -182,8 +175,6 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("kick", true);
 
         Invoke("ResetKick", 0.417f);
-
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
     private void Header()
@@ -191,8 +182,6 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("header", true);
 
         Invoke("ResetHeader", 0.417f);
-
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
 
