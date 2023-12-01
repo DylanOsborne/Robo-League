@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     public float groundDrag;
 
     public float jumpForce;
-    public float jumpCooldown;
     public float airMultiplier;
     public bool secondJump;
 
@@ -21,13 +20,18 @@ public class PlayerMovement : MonoBehaviour
     public KeyCode punchKey = KeyCode.Mouse0;
     public KeyCode kickKey = KeyCode.Mouse1;
     public KeyCode headerKey = KeyCode.Mouse2;
-    public KeyCode walkKey = KeyCode.W;
+    public KeyCode walkKeyW = KeyCode.W;
+    public KeyCode walkKeyA = KeyCode.A;
+    public KeyCode walkKeyS = KeyCode.S;
+    public KeyCode walkKeyD = KeyCode.D;
 
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
     public bool grounded;
+
+    [Header("Misc")]
 
     public Transform orientation;
 
@@ -37,6 +41,8 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
 
     Rigidbody rb;
+
+    public Rigidbody ballRigidbody;
 
     public Animator animator;
 
@@ -66,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
                 Jump();
             }
 
-            if (Input.GetKey(walkKey))
+            if (Input.GetKey(walkKeyW) || Input.GetKey(walkKeyA) || Input.GetKey(walkKeyS) || Input.GetKey(walkKeyD))
             {
                 animator.SetBool("walking", true);
             } 
@@ -107,7 +113,6 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
 
-        // Apply custom gravity to the character
         rb.AddForce(Vector3.up * customGravity, ForceMode.Acceleration);
     }
 
@@ -120,10 +125,8 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
 
-        // Calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horzontalInput;
 
-        // on ground
         if(grounded)
         {
             rb.AddForce(10f * moveSpeed * moveDirection.normalized, ForceMode.Force);
@@ -137,7 +140,6 @@ public class PlayerMovement : MonoBehaviour
 
     private bool CheckGrounded()
     {
-        // Use a sphere cast to check if the player is grounded
         return Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
@@ -145,7 +147,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 flatVel = new(rb.velocity.x, 0f, rb.velocity.z);
 
-        // Limit velocity if needed
         if(flatVel.magnitude > moveSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
@@ -155,7 +156,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
@@ -167,12 +167,16 @@ public class PlayerMovement : MonoBehaviour
     {
         animator.SetBool("punch", true);
 
+        ApplyPunchForce();
+
         Invoke("ResetPunch", 0.417f);
     }
 
     private void Kick()
     {
         animator.SetBool("kick", true);
+
+        ApplyKickForce();
 
         Invoke("ResetKick", 0.417f);
     }
@@ -181,7 +185,42 @@ public class PlayerMovement : MonoBehaviour
     {
         animator.SetBool("header", true);
 
+        ApplyHeaderForce();
+
         Invoke("ResetHeader", 0.417f);
+    }
+
+    private void ApplyPunchForce()
+    {
+        if (ballRigidbody != null)
+        {
+            Vector3 punchForceDirection = transform.forward;
+            float punchForceStrength = 10f;
+
+            ballRigidbody.AddForce(punchForceDirection * punchForceStrength, ForceMode.Impulse);
+        }
+    }
+
+    private void ApplyKickForce()
+    {
+        if (ballRigidbody != null)
+        {
+            Vector3 kickForceDirection = transform.forward + transform.up;
+            float kickForceStrength = 10f;
+
+            ballRigidbody.AddForce(kickForceDirection * kickForceStrength, ForceMode.Impulse);
+        }
+    }
+
+    private void ApplyHeaderForce()
+    {
+        if (ballRigidbody != null)
+        {
+            Vector3 headerForceDirection = transform.forward - transform.up;
+            float headerForceStrength = 10f;
+
+            ballRigidbody.AddForce(headerForceDirection * headerForceStrength, ForceMode.Impulse);
+        }
     }
 
 
