@@ -30,6 +30,17 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayer;  // Layer mask for identifying the ground.
     public bool grounded;  // Flag indicating whether the player is grounded.
 
+    [Header("Ball Interaction")]
+    public Collider punchCollider1; // Attach a trigger collider for left punch detection
+    public Collider punchCollider2; // Attach a trigger collider for right punch detection
+    public Collider kickCollider;  // Attach a trigger collider for kick detection
+    public Collider headerCollider; // Attach a trigger collider for header detection
+
+    // Flags for action states
+    private bool isPunching;
+    private bool isKicking;
+    private bool isHeading;
+
     [Header("Misc")]
     public Transform orientation;  // Transform representing the player's orientation.
 
@@ -167,84 +178,81 @@ public class PlayerMovement : MonoBehaviour
 
     private void Punch()
     {
+        // Set punch flag to true
+        isPunching = true;
+
         // Trigger punch animation
         animator.SetBool("punch", true);
 
-        // Apply force to the ball
-        ApplyPunchForce();
-
-        // Reset punch animation after a delay
+        // Reset punch animation and flag after a delay
         Invoke("ResetPunch", 0.417f);
     }
 
     private void Kick()
     {
+        // Set kick flag to true
+        isKicking = true;
+
         // Trigger kick animation
         animator.SetBool("kick", true);
 
-        // Apply force to the ball
-        ApplyKickForce();
-
-        // Reset kick animation after a delay
+        // Reset kick animation and flag after a delay
         Invoke("ResetKick", 0.417f);
     }
 
     private void Header()
     {
+        // Set header flag to true
+        isHeading = true;
+
         // Trigger header animation
         animator.SetBool("header", true);
 
-        // Apply force to the ball
-        ApplyHeaderForce();
-
-        // Reset header animation after a delay
+        // Reset header animation and flag after a delay
         Invoke("ResetHeader", 0.417f);
     }
 
-    private void ApplyPunchForce()
+    private void ApplyForce(Collider collider, Vector3 forceDirection, float forceStrength)
     {
-        // Check if the ball's Rigidbody is available
-        if (ballRigidbody != null)
+        if (collider != null && ballRigidbody != null)
         {
-            // Calculate punch force direction and strength
-            Vector3 punchForceDirection = transform.forward;
-            float punchForceStrength = 10f;
-
-            // Apply the punch force to the ball
-            ballRigidbody.AddForce(punchForceDirection * punchForceStrength, ForceMode.Impulse);
+            // Check if the collider is in contact with the ball and the corresponding action flag is true
+            if (collider.bounds.Intersects(ballRigidbody.GetComponent<Collider>().bounds) &&
+                ((collider == punchCollider1 || collider == punchCollider2) && isPunching) ||
+                (collider == kickCollider && isKicking) ||
+                (collider == headerCollider && isHeading))
+            {
+                // Apply the force to the ball
+                ballRigidbody.AddForce(forceDirection * forceStrength, ForceMode.Impulse);
+            }
         }
     }
 
-    private void ApplyKickForce()
+    private void OnTriggerStay(Collider other)
     {
-        // Check if the ball's Rigidbody is available
-        if (ballRigidbody != null)
-        {
-            // Calculate kick force direction and strength
-            Vector3 kickForceDirection = transform.forward + transform.up;
-            float kickForceStrength = 10f;
-
-            // Apply the kick force to the ball
-            ballRigidbody.AddForce(kickForceDirection * kickForceStrength, ForceMode.Impulse);
-        }
-    }
-
-    private void ApplyHeaderForce()
-    {
-        // Check if the ball's Rigidbody is available
-        if (ballRigidbody != null)
-        {
-            // Calculate header force direction and strength
-            Vector3 headerForceDirection = transform.forward - transform.up;
-            float headerForceStrength = 10f;
-
-            // Apply the header force to the ball
-            ballRigidbody.AddForce(headerForceDirection * headerForceStrength, ForceMode.Impulse);
-        }
+        // Apply forces when the trigger colliders are in contact with the ball
+        ApplyForce(punchCollider1, transform.forward, 5f);
+        ApplyForce(punchCollider2, transform.forward, 5f);
+        ApplyForce(kickCollider, transform.forward + transform.up, 5f);
+        ApplyForce(headerCollider, transform.forward - transform.up, 5f);
     }
 
     // Methods to reset the action parameters
-    private void ResetPunch() { animator.SetBool("punch", false); }
-    private void ResetKick() { animator.SetBool("kick", false); }
-    private void ResetHeader() { animator.SetBool("header", false); }
+    private void ResetPunch()
+    {
+        animator.SetBool("punch", false);
+        isPunching = false;
+    }
+
+    private void ResetKick()
+    {
+        animator.SetBool("kick", false);
+        isKicking = false;
+    }
+
+    private void ResetHeader()
+    {
+        animator.SetBool("header", false);
+        isHeading = false;
+    }
 }
