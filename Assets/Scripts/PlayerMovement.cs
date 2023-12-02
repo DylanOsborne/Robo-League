@@ -5,14 +5,16 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed;  // Speed of the player's movement.
-    public float groundDrag;  // Drag applied when the player is on the ground.
+    public float moveSpeed = 60f;  // Speed of the player's movement.
+    public float groundDrag = 1f;  // Drag applied when the player is on the ground.
 
-    public float jumpForce;  // Force applied when jumping.
-    public float airMultiplier;  // Multiplier for movement in the air.
+    public float jumpForce = 25f;  // Force applied when jumping.
+    private float airMultiplier = 2f;  // Multiplier for movement in the air.
     public bool secondJump;  // Flag for allowing a second jump.
 
     public float customGravity = -20f;  // Custom gravity to simulate realistic falling.
+
+    public float stamina = 100f; // Max amount of stamina the player will have
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;  // Key to trigger a jump.
@@ -23,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public KeyCode walkKeyA = KeyCode.A;  // Key for left movement.
     public KeyCode walkKeyS = KeyCode.S;  // Key for backward movement.
     public KeyCode walkKeyD = KeyCode.D;  // Key for right movement.
+    public KeyCode sprintKey = KeyCode.LeftShift; // Key to activate sprinting
 
     [Header("Ground Check")]
     public Transform groundCheck;  // Transform representing the ground check position.
@@ -101,6 +104,17 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 animator.SetBool("walking", false);
+            }
+
+            if (Input.GetKeyDown(sprintKey))
+            {
+                moveSpeed = 110f;
+                animator.SetFloat("walkSpeed", 1.5f);
+            } 
+            else if (Input.GetKeyUp(sprintKey))
+            {
+                moveSpeed = 60f;
+                animator.SetFloat("walkSpeed", 1f);
             }
         }
         else if (!grounded)
