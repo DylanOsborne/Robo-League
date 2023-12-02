@@ -14,7 +14,12 @@ public class PlayerMovement : MonoBehaviour
 
     public float customGravity = -20f;  // Custom gravity to simulate realistic falling.
 
-    public float stamina = 100f; // Max amount of stamina the player will have
+    [Header("Stamina")]
+    public float maxStamina = 100f;
+    public float sprintStaminaConsumptionRate = 35f;
+    public float staminaRechargeRate = 20f;
+
+    public float currentStamina;
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;  // Key to trigger a jump.
@@ -70,12 +75,15 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
         animator = GetComponent<Animator>();
+
+        rb.freezeRotation = true;
 
         ballRigidbody.position = ballSpawmPos.position;
         rb.position = playerSpawnPos1.position;
         rb.rotation = playerSpawnPos1.rotation;
+
+        currentStamina = maxStamina;
     }
 
     private void Update()
@@ -99,22 +107,42 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetKey(walkKeyW) || Input.GetKey(walkKeyA) || Input.GetKey(walkKeyS) || Input.GetKey(walkKeyD))
             {
+                // Check if sprint key is pressed and there's enough stamina
+                if (Input.GetKey(sprintKey) && currentStamina > 0)
+                {
+                    // Sprinting
+                    moveSpeed = 110f;
+                    animator.SetFloat("walkSpeed", 1.5f);
+
+                    // Consume stamina
+                    currentStamina -= sprintStaminaConsumptionRate * Time.deltaTime;
+
+                    // Disable sprinting if stamina is zero
+                    if (currentStamina <= 0)
+                    {
+                        currentStamina = 0;
+                        moveSpeed = 60f;
+                        animator.SetFloat("walkSpeed", 1f);
+                    }
+                }
+                else
+                {
+                    // Not sprinting, gradually recharge stamina
+                    currentStamina += staminaRechargeRate * Time.deltaTime;
+
+                    // Clamp the stamina value to the maximum
+                    currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
+
+                    // Regular walking speed
+                    moveSpeed = 60f;
+                    animator.SetFloat("walkSpeed", 1f);
+                }
+
                 animator.SetBool("walking", true);
             }
             else
             {
                 animator.SetBool("walking", false);
-            }
-
-            if (Input.GetKeyDown(sprintKey))
-            {
-                moveSpeed = 110f;
-                animator.SetFloat("walkSpeed", 1.5f);
-            } 
-            else if (Input.GetKeyUp(sprintKey))
-            {
-                moveSpeed = 60f;
-                animator.SetFloat("walkSpeed", 1f);
             }
         }
         else if (!grounded)
