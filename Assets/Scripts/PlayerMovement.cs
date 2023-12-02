@@ -218,9 +218,10 @@ public class PlayerMovement : MonoBehaviour
         {
             // Check if the collider is in contact with the ball and the corresponding action flag is true
             if (collider.bounds.Intersects(ballRigidbody.GetComponent<Collider>().bounds) &&
-                ((collider == punchCollider1 || collider == punchCollider2) && isPunching) ||
-                (collider == kickCollider && isKicking) ||
-                (collider == headerCollider && isHeading))
+                collider == punchCollider1 && isPunching ||
+                collider == punchCollider2 && isPunching ||
+                collider == kickCollider && isKicking ||
+                collider == headerCollider && isHeading)
             {
                 // Apply the force to the ball
                 ballRigidbody.AddForce(forceDirection * forceStrength, ForceMode.Impulse);
