@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -18,7 +19,6 @@ public class PlayerMovement : MonoBehaviour
     public float maxStamina = 100f;
     public float sprintStaminaConsumptionRate = 35f;
     public float staminaRechargeRate = 20f;
-
     public float currentStamina;
 
     [Header("Keybinds")]
@@ -72,6 +72,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Animator animator;  // Reference to the player's Animator component.
 
+    [SerializeField] private TextMeshProUGUI staminaText;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -84,10 +86,22 @@ public class PlayerMovement : MonoBehaviour
         rb.rotation = playerSpawnPos1.rotation;
 
         currentStamina = maxStamina;
+
+        // Set the X position of the text
+        Vector3 newTextWidth = staminaText.transform.position;
+        newTextWidth.x = Screen.width * 0.95f;
+        staminaText.transform.position = newTextWidth;
+
+        // Set the y position of the text
+        Vector3 newTextHeight = staminaText.transform.position;
+        newTextHeight.y = Screen.height * 0.3f;
+        staminaText.transform.position = newTextHeight;
     }
 
     private void Update()
     {
+        staminaText.text = Mathf.RoundToInt(currentStamina).ToString();
+
         grounded = CheckGrounded();
         SetInput();
         SpeedControl();
@@ -142,11 +156,19 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
+                // Not sprinting, gradually recharge stamina
+                currentStamina += staminaRechargeRate * Time.deltaTime;
+
+                // Clamp the stamina value to the maximum
+                currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
+
                 animator.SetBool("walking", false);
             }
         }
         else if (!grounded)
         {
+            moveSpeed = 60f;
+
             rb.drag = 0;
 
             if (Input.GetKeyDown(jumpKey) && secondJump == true)
