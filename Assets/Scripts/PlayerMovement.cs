@@ -41,6 +41,15 @@ public class PlayerMovement : MonoBehaviour
     private bool isKicking;
     private bool isHeading;
 
+    [Header("SpawnPositions")]
+    public Transform ballSpawmPos;
+    public Transform playerSpawnPos1;
+    public Transform playerSpawnPos2;
+    public Transform playerSpawnPos3;
+    public Transform playerSpawnPos4;
+    public Transform playerSpawnPos5;
+    public Transform playerSpawnPos6;
+
     [Header("Misc")]
     public Transform orientation;  // Transform representing the player's orientation.
 
@@ -60,6 +69,10 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         animator = GetComponent<Animator>();
+
+        ballRigidbody.position = ballSpawmPos.position;
+        rb.position = playerSpawnPos1.position;
+        rb.rotation = playerSpawnPos1.rotation;
     }
 
     private void Update()
