@@ -19,7 +19,7 @@ public class BallInteraction : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
     }
 
     public void Punch()
