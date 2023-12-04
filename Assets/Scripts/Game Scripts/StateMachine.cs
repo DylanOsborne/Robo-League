@@ -2,26 +2,24 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
-    bool gameActive = false;
+    private bool gameActive;
+    private int gameLength = 300;
+    public float currentGameTime;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        currentGameTime = gameLength;
+        gameActive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        while (gameActive)
+        if (gameActive)
         {
-
+            currentGameTime -= 1 * Time.deltaTime;
         }
-    }
-
-    private void GameStarts()
-    {
-        gameActive = true;
     }
 
     private void GamePaused()

@@ -487,7 +487,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1
+  m_text: 000
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -653,7 +653,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203653698}
-  m_LocalRotation: {x: 0.118737526, y: 0.000000017610462, z: -0.0000000021059203, w: 0.9929257}
+  m_LocalRotation: {x: 0.118737526, y: -0.000000017610462, z: 0.0000000021059203, w: 0.9929257}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1269,7 +1269,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 576517355}
-  m_LocalRotation: {x: 0.11401177, y: -0.000000017620282, z: 0.0000000020221047, w: 0.99347943}
+  m_LocalRotation: {x: 0.11401177, y: 0.000000017620286, z: -0.000000002022105, w: 0.99347943}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1838,7 +1838,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.11873755, y: 0.000000035220925, z: -0.000000004211842, w: 0.9929257}
+  m_LocalRotation: {x: 0.11873755, y: -0.000000035220925, z: 0.000000004211842, w: 0.9929257}
   m_LocalPosition: {x: -0.39, y: 45.449997, z: -8.849998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2359,6 +2359,8 @@ GameObject:
   - component: {fileID: 1832097128}
   - component: {fileID: 1832097127}
   - component: {fileID: 1832097130}
+  - component: {fileID: 1832097131}
+  - component: {fileID: 1832097132}
   m_Layer: 0
   m_Name: ScriptManager
   m_TagString: Untagged
@@ -2400,10 +2402,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   staminaText: {fileID: 174153674}
-  TimeText: {fileID: 53849941}
-  RGoalText: {fileID: 695340632}
-  BGoalText: {fileID: 147233218}
+  timeText: {fileID: 53849941}
+  rGoalText: {fileID: 695340632}
+  bGoalText: {fileID: 147233218}
   staminaSystem: {fileID: 5866666021895383082}
+  stateMachine: {fileID: 1832097131}
 --- !u!4 &1832097129
 Transform:
   m_ObjectHideFlags: 0
@@ -2440,6 +2443,34 @@ MonoBehaviour:
   walkKeyS: 115
   walkKeyD: 100
   sprintKey: 304
+--- !u!114 &1832097131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1832097126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64cf5f1598fe9d548ab28a9c0b2060e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentGameTime: 0
+--- !u!114 &1832097132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1832097126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e741851cba3ad425c91ecf922cc6b379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"declarations":{"Kind":"Object","collection":{"$content":[],"$version":"A"},"$version":"A"}}'
+    _objectReferences: []
 --- !u!1 &1842634467
 GameObject:
   m_ObjectHideFlags: 0

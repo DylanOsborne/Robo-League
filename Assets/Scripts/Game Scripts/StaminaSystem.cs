@@ -13,8 +13,6 @@ public class StaminaSystem : MonoBehaviour
 
     public float moveSpeed = 60f;
 
-    
-
     private void Start()
     {
         currentStamina = maxStamina;
