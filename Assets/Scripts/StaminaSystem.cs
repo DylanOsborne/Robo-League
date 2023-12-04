@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 
 public class StaminaSystem : MonoBehaviour
 {
@@ -10,31 +9,16 @@ public class StaminaSystem : MonoBehaviour
     private readonly float sprintStaminaConsumptionRate = 35f;
     private readonly float staminaRechargeRate = 20f;
 
-    private float currentStamina;
+    public float currentStamina;
 
     public float moveSpeed = 60f;
 
-    [SerializeField] private TextMeshProUGUI staminaText;
+    
 
     private void Start()
     {
         currentStamina = maxStamina;
         animator = GetComponent<Animator>();
-
-        // Set the X position of the text
-        Vector3 newTextWidth = staminaText.transform.position;
-        newTextWidth.x = Screen.width * 0.95f;
-        staminaText.transform.position = newTextWidth;
-
-        // Set the y position of the text
-        Vector3 newTextHeight = staminaText.transform.position;
-        newTextHeight.y = Screen.height * 0.3f;
-        staminaText.transform.position = newTextHeight;
-    }
-
-    private void Update()
-    {
-        staminaText.text = Mathf.RoundToInt(currentStamina).ToString();
     }
 
     public void Sprint()

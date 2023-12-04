@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 174153675}
   - component: {fileID: 174153674}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: StaminaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,7 +383,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203653698}
-  m_LocalRotation: {x: 0.118737526, y: -0.000000017610462, z: 0.0000000021059203, w: 0.9929257}
+  m_LocalRotation: {x: 0.118737526, y: 0.000000017610462, z: -0.0000000021059203, w: 0.9929257}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -996,7 +996,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 576517355}
-  m_LocalRotation: {x: 0.11401177, y: 0.000000017620286, z: -0.000000002022105, w: 0.99347943}
+  m_LocalRotation: {x: 0.11401177, y: -0.000000017620282, z: 0.0000000020221047, w: 0.99347943}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1305,7 +1305,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935470801}
-  m_LocalRotation: {x: 0.19611615, y: 0.000000025603457, z: -0.0000000051206914, w: 0.9805807}
+  m_LocalRotation: {x: 0.19611612, y: -0.000000003876053, z: 7.7520984e-10, w: 0.9805807}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1430,7 +1430,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.11873755, y: -0.000000035220925, z: 0.000000004211842, w: 0.9929257}
+  m_LocalRotation: {x: 0.11873755, y: 0.000000035220925, z: -0.000000004211842, w: 0.9929257}
   m_LocalPosition: {x: -0.39, y: 45.449997, z: -8.849998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2300,6 +2300,7 @@ GameObject:
   - component: {fileID: 5866666021895383083}
   - component: {fileID: 5866666021895383085}
   - component: {fileID: 5866666021895383084}
+  - component: {fileID: 5866666021895383086}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2655,8 +2656,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 5866666021895383081}
+  currentStamina: 0
   moveSpeed: 60
-  staminaText: {fileID: 174153674}
 --- !u!114 &5866666021895383083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2717,6 +2718,19 @@ MonoBehaviour:
   kickCollider: {fileID: 1117544060}
   headerCollider: {fileID: 1458392290}
   ballRigidbody: {fileID: 788683959}
+--- !u!114 &5866666021895383086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149173463273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d2394520b2ead499a213042b7ede37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staminaText: {fileID: 174153674}
 --- !u!137 &6290232320175738443
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
