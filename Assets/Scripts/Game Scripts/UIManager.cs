@@ -5,7 +5,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI staminaText;
 
-    StaminaSystem staminaSystem;
+    public StaminaSystem staminaSystem;
 
     // Start is called before the first frame update
     void Start()

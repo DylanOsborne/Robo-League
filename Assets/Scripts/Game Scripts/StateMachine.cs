@@ -38,4 +38,6 @@ public class StateMachine : MonoBehaviour
     {
         gameActive = false;
     }
+
+    
 }
