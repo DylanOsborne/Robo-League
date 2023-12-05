@@ -12,12 +12,13 @@ public class StateMachine : MonoBehaviour
     public SpawnManager spawnManager;
     public BallInteraction ballInteraction;
     public PlayerMovement playerMovement;
+    public Animator animator;
+    public StaminaSystem staminaSystem;
 
     private GameState gameState;
     private int gameLength = 300;
     public float currentGameTime;
 
-    // Start is called before the first frame update
     void Start()
     {
         spawnManager.StartPos();
@@ -25,7 +26,6 @@ public class StateMachine : MonoBehaviour
         SetGameState(GameState.Paused);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (gameState == GameState.Playing)
@@ -81,16 +81,27 @@ public class StateMachine : MonoBehaviour
 
     private void GoalScored()
     {
-        spawnManager.StartPos();
-
-        ballInteraction.ResetBall();
+        ResetValues();
 
         SetGameState(GameState.Paused);
+    }
+
+    private void ResetValues()
+    {
+        spawnManager.StartPos();
+        ballInteraction.ResetBall();
+
+        animator.SetBool("walking", false);
+        animator.SetBool("punch", false);
+        animator.SetBool("kick", false);
+        animator.SetBool("header", false);
+        animator.SetBool("grounded", true);
+
+        staminaSystem.currentStamina = 100;
     }
 
     private void GameOver()
     {
         
-        // Add any additional logic for game over state
     }
 }

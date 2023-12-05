@@ -28,7 +28,11 @@ public class BallInteraction : MonoBehaviour
 
     public void ResetBall()
     {
+        // Stop the ball's movement
         ballRigidbody.velocity = Vector3.zero;
+
+        // Stop the ball's rotation
+        ballRigidbody.angularVelocity = Vector3.zero;
     }
 
     public void Punch()
