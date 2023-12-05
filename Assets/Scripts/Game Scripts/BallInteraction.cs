@@ -26,6 +26,11 @@ public class BallInteraction : MonoBehaviour
         return ballRigidbody.position.x > rGoal.position.x || ballRigidbody.position.x < bGoal.position.x;
     }
 
+    public void ResetBall()
+    {
+        ballRigidbody.velocity = Vector3.zero;
+    }
+
     public void Punch()
     {
         // Set punch flag to true

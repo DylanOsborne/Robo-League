@@ -14,11 +14,6 @@ public class SpawnManager : MonoBehaviour
     public Transform playerSpawnPos5;
     public Transform playerSpawnPos6;
 
-    void Start()
-    {
-        StartPos();
-    }
-
     public void StartPos()
     {
         playerRigidbody.position = playerSpawnPos1.position;

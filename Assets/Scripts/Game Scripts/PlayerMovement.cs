@@ -34,86 +34,96 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 moveDirection;  // Calculated movement direction.
 
-    Rigidbody rb;  // Reference to the player's Rigidbody component.
+    public Rigidbody rb;  // Reference to the player's Rigidbody component.
 
     public Animator animator;  // Reference to the player's Animator component.
 
+    public bool isPaused = false;
+
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
-
         rb.freezeRotation = true;
+    }
+
+    public void SetPaused(bool paused)
+    {
+        isPaused = paused;
     }
 
     private void Update()
     {
-        moveSpeed = staminaSystem.moveSpeed;
-
-        grounded = CheckGrounded();
-        SetInput();
-        SpeedControl();
-
-        animator.SetBool("grounded", grounded);
-
-        if (grounded)
+        if(!isPaused)
         {
-            secondJump = true;
+            moveSpeed = staminaSystem.moveSpeed;
 
-            rb.drag = groundDrag;
+            grounded = CheckGrounded();
+            SetInput();
+            SpeedControl();
 
-            if (Input.GetKeyDown(inputManager.jumpKey))
+            animator.SetBool("grounded", grounded);
+
+            if (grounded)
             {
-                Jump();
-            }
+                secondJump = true;
 
-            if (Input.GetKey(inputManager.walkKeyW) || Input.GetKey(inputManager.walkKeyA) || Input.GetKey(inputManager.walkKeyS) || Input.GetKey(inputManager.walkKeyD))
-            {
-                // Check if sprint key is pressed and there's enough stamina
-                if (Input.GetKey(inputManager.sprintKey))
+                rb.drag = groundDrag;
+
+                if (Input.GetKeyDown(inputManager.jumpKey))
                 {
-                   staminaSystem.Sprint();
+                    Jump();
+                }
+
+                if (Input.GetKey(inputManager.walkKeyW) || Input.GetKey(inputManager.walkKeyA) || Input.GetKey(inputManager.walkKeyS) || Input.GetKey(inputManager.walkKeyD))
+                {
+                    // Check if sprint key is pressed and there's enough stamina
+                    if (Input.GetKey(inputManager.sprintKey))
+                    {
+                        staminaSystem.Sprint();
+                    }
+                    else
+                    {
+                        staminaSystem.RechargeStamina();
+                    }
+
+                    animator.SetBool("walking", true);
                 }
                 else
                 {
                     staminaSystem.RechargeStamina();
-                }
 
-                animator.SetBool("walking", true);
+                    animator.SetBool("walking", false);
+                }
             }
-            else
+            else if (!grounded)
             {
                 staminaSystem.RechargeStamina();
 
-                animator.SetBool("walking", false);
+                rb.drag = 0;
+
+                if (Input.GetKeyDown(inputManager.jumpKey) && secondJump == true)
+                {
+                    secondJump = false;
+
+                    Jump();
+                }
             }
+
+            if (Input.GetKeyDown(inputManager.punchKey)) { ballInteraction.Punch(); }
+
+            if (Input.GetKeyDown(inputManager.kickKey)) { ballInteraction.Kick(); }
+
+            if (Input.GetKeyDown(inputManager.headerKey)) { ballInteraction.Header(); }
         }
-        else if (!grounded)
-        {
-            staminaSystem.RechargeStamina();
-
-            rb.drag = 0;
-
-            if (Input.GetKeyDown(inputManager.jumpKey) && secondJump == true)
-            {
-                secondJump = false;
-
-                Jump();
-            }
-        }
-
-        if (Input.GetKeyDown(inputManager.punchKey)) { ballInteraction.Punch(); }
-
-        if (Input.GetKeyDown(inputManager.kickKey)) { ballInteraction.Kick(); }
-
-        if (Input.GetKeyDown(inputManager.headerKey)) { ballInteraction.Header(); }
     }
 
     private void FixedUpdate()
     {
-        MovePlayer();
+        if(!isPaused)
+        {
+            MovePlayer();
 
-        rb.AddForce(Vector3.up * customGravity, ForceMode.Acceleration);
+            rb.AddForce(Vector3.up * customGravity, ForceMode.Acceleration);
+        }
     }
 
     private void SetInput()
