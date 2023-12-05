@@ -21,6 +21,7 @@ public class StateMachine : MonoBehaviour
 
     void Start()
     {
+        // Set initial positions and game time
         spawnManager.StartPos();
         currentGameTime = gameLength;
         SetGameState(GameState.Paused);
@@ -30,15 +31,18 @@ public class StateMachine : MonoBehaviour
     {
         if (gameState == GameState.Playing)
         {
+            // Update game time and check for goal
             currentGameTime -= Time.deltaTime;
 
             if (currentGameTime <= 0f)
             {
+                // If game time is up, set the game state to GameOver
                 SetGameState(GameState.GameOver);
             }
             
             if (ballInteraction.Goal())
             {
+                // If a goal is scored, trigger the GoalScored function
                 GoalScored();
             }
         }
@@ -48,6 +52,7 @@ public class StateMachine : MonoBehaviour
     {
         gameState = newState;
 
+        // Execute specific actions based on the new game state
         switch (gameState)
         {
             case GameState.Playing:
@@ -64,30 +69,33 @@ public class StateMachine : MonoBehaviour
 
     private void GamePlaying()
     {
+        // Allow player movement when in playing state
         playerMovement.SetPaused(false);
     }
 
     private void GamePaused()
     {
+        // Pause player movement and delay resuming after 3 seconds
         playerMovement.SetPaused(true);
-
         Invoke("DelayedGamePlaying", 3f);
     }
 
     private void DelayedGamePlaying()
     {
+        // Resume playing state after the delay
         SetGameState(GameState.Playing);
     }
 
     private void GoalScored()
     {
+        // Reset values, pause the game, and set the state to Paused
         ResetValues();
-
         SetGameState(GameState.Paused);
     }
 
     private void ResetValues()
     {
+        // Reset player and ball positions, animations, and stamina
         spawnManager.StartPos();
         ballInteraction.ResetBall();
 

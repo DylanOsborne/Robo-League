@@ -12,16 +12,16 @@ public class UIManager : MonoBehaviour
     public StaminaSystem staminaSystem;
     public StateMachine stateMachine;
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Initialize default values
         timeText.text = "05:00";
         staminaText.text = "100";
     }
 
-    // Update is called once per frame
     void Update()
     {
+        // Update time and stamina text
         TimeSpan time = TimeSpan.FromSeconds(stateMachine.currentGameTime);
         timeText.text = time.ToString("mm':'ss");
         staminaText.text = Mathf.RoundToInt(staminaSystem.currentStamina).ToString();

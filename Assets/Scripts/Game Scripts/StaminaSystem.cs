@@ -5,9 +5,9 @@ public class StaminaSystem : MonoBehaviour
     public Animator animator;
 
     [Header("Stamina Settings")]
-    private readonly float maxStamina = 100f;
-    private readonly float sprintStaminaConsumptionRate = 35f;
-    private readonly float staminaRechargeRate = 20f;
+    private const float maxStamina = 100f;
+    private const float sprintStaminaConsumptionRate = 35f;
+    private const float staminaRechargeRate = 20f;
 
     public float currentStamina;
 
@@ -15,6 +15,7 @@ public class StaminaSystem : MonoBehaviour
 
     private void Start()
     {
+        // Initialize stamina and animator
         currentStamina = maxStamina;
         animator = GetComponent<Animator>();
     }
@@ -31,6 +32,7 @@ public class StaminaSystem : MonoBehaviour
         }
         else
         {
+            // Reset speed if stamina is depleted
             moveSpeed = 60f;
             animator.SetFloat("walkSpeed", 1f);
         }

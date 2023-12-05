@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    public Rigidbody playerRigidbody;  // Reference to the player's Rigidbody component.
-    public Rigidbody ballRigidbody;  // Reference to the Rigidbody of the ball.
+    public Rigidbody playerRigidbody;
+    public Rigidbody ballRigidbody;
 
     [Header("SpawnPositions")]
     public Transform ballSpawnPos;
@@ -16,6 +16,7 @@ public class SpawnManager : MonoBehaviour
 
     public void StartPos()
     {
+        // Set initial positions for player and ball
         playerRigidbody.position = playerSpawnPos1.position;
         playerRigidbody.rotation = playerSpawnPos1.rotation;
 

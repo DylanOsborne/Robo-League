@@ -9,29 +9,27 @@ public class BallInteraction : MonoBehaviour
     public Transform bGoal;
 
     [Header("Colliders")]
-    public Collider punchCollider1; // Attach a trigger collider for left punch detection
-    public Collider punchCollider2; // Attach a trigger collider for right punch detection
-    public Collider kickCollider;  // Attach a trigger collider for kick detection
-    public Collider headerCollider; // Attach a trigger collider for header detection
+    public Collider punchCollider1;
+    public Collider punchCollider2;
+    public Collider kickCollider;
+    public Collider headerCollider;
 
-    public Rigidbody ballRigidbody;  // Reference to the Rigidbody of the ball.
+    public Rigidbody ballRigidbody;
 
-    // Flags for action states
     private bool isPunching;
     private bool isKicking;
     private bool isHeading;
 
     public bool Goal()
     {
+        // Check if the ball is past the red or blue goals
         return ballRigidbody.position.x > rGoal.position.x || ballRigidbody.position.x < bGoal.position.x;
     }
 
     public void ResetBall()
     {
-        // Stop the ball's movement
+        // Stop the ball's movement and rotation
         ballRigidbody.velocity = Vector3.zero;
-
-        // Stop the ball's rotation
         ballRigidbody.angularVelocity = Vector3.zero;
     }
 

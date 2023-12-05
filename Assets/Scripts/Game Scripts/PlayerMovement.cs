@@ -10,43 +10,45 @@ public class PlayerMovement : MonoBehaviour
     public BallInteraction ballInteraction;
 
     [Header("Movement")]
-    public float groundDrag = 1f;  // Drag applied when the player is on the ground.
+    public float groundDrag = 1f;
 
-    public float jumpForce = 25f;  // Force applied when jumping.
-    private float airMultiplier = 2f;  // Multiplier for movement in the air.
-    public bool secondJump;  // Flag for allowing a second jump.
+    public float jumpForce = 25f;
+    private float airMultiplier = 2f; 
+    public bool secondJump;
 
-    public float customGravity = -20f;  // Custom gravity to simulate realistic falling.
+    public float customGravity = -20f;  
 
-    float moveSpeed;  // Speed of the player's movement.
+    float moveSpeed;
 
     [Header("Ground Check")]
-    public Transform groundCheck;  // Transform representing the ground check position.
-    public float groundCheckRadius = 0.2f;  // Radius for the ground check sphere.
-    public LayerMask groundLayer;  // Layer mask for identifying the ground.
-    public bool grounded;  // Flag indicating whether the player is grounded.
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    public bool grounded;
 
     [Header("Misc")]
-    public Transform orientation;  // Transform representing the player's orientation.
+    public Transform orientation; 
 
-    float horizontalInput;  // Input for horizontal movement.
-    float verticalInput;  // Input for vertical movement.
+    float horizontalInput; 
+    float verticalInput;  
 
-    Vector3 moveDirection;  // Calculated movement direction.
+    Vector3 moveDirection; 
 
-    public Rigidbody rb;  // Reference to the player's Rigidbody component.
+    public Rigidbody rb;
 
-    public Animator animator;  // Reference to the player's Animator component.
+    public Animator animator;
 
     public bool isPaused = false;
 
     private void Start()
     {
+        // Freeze rotation on start
         rb.freezeRotation = true;
     }
 
     public void SetPaused(bool paused)
     {
+        // Set pause state
         isPaused = paused;
     }
 
@@ -54,8 +56,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if(!isPaused)
         {
+            // Update move speed and check for inputs
             moveSpeed = staminaSystem.moveSpeed;
-
             grounded = CheckGrounded();
             SetInput();
             SpeedControl();
@@ -75,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
 
                 if (Input.GetKey(inputManager.walkKeyW) || Input.GetKey(inputManager.walkKeyA) || Input.GetKey(inputManager.walkKeyS) || Input.GetKey(inputManager.walkKeyD))
                 {
-                    // Check if sprint key is pressed and there's enough stamina
                     if (Input.GetKey(inputManager.sprintKey))
                     {
                         staminaSystem.Sprint();
@@ -120,6 +121,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(!isPaused)
         {
+            // Move player and apply custom gravity
             MovePlayer();
 
             rb.AddForce(Vector3.up * customGravity, ForceMode.Acceleration);
@@ -128,6 +130,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetInput()
     {
+        // Get input values
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
     }
@@ -139,10 +142,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (grounded)
         {
+            // Move player on the ground
             rb.AddForce(10f * moveSpeed * moveDirection.normalized, ForceMode.Force);
         }
         else
         {
+            // Apply air multiplier if in the air
             rb.AddForce(10f * airMultiplier * moveSpeed * moveDirection.normalized, ForceMode.Force);
         }
     }
@@ -167,10 +172,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        // Reset y velocity
+        // Reset y velocity and apply upward force for jumping
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        // Apply upward force for jumping
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
 
         // Trigger jump animation
