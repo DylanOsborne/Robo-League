@@ -16,6 +16,11 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
+        StartPos();
+    }
+
+    public void StartPos()
+    {
         playerRigidbody.position = playerSpawnPos1.position;
         playerRigidbody.rotation = playerSpawnPos1.rotation;
 

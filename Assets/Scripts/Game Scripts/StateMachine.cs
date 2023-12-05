@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
+    public SpawnManager spawnManager;
+    public BallInteraction ballInteraction;
+
     private bool gameActive;
     private int gameLength = 300;
     public float currentGameTime;
@@ -19,6 +22,11 @@ public class StateMachine : MonoBehaviour
         if (gameActive)
         {
             currentGameTime -= 1 * Time.deltaTime;
+
+            if (ballInteraction.Goal())
+            {
+                GameReset();
+            }
         }
     }
 
@@ -27,15 +35,9 @@ public class StateMachine : MonoBehaviour
         gameActive = false;
     }
 
-    private void GameReset()
+    public void GameReset()
     {
         gameActive = false;
-    }
-
-    private void GoalScored()
-    {
-        gameActive = false;
-    }
-
-    
+        spawnManager.StartPos();
+    }    
 }

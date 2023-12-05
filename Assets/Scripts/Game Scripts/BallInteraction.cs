@@ -4,6 +4,10 @@ public class BallInteraction : MonoBehaviour
 {
     public Animator animator;
 
+    [Header("Goals")]
+    public Transform rGoal;
+    public Transform bGoal;
+
     [Header("Colliders")]
     public Collider punchCollider1; // Attach a trigger collider for left punch detection
     public Collider punchCollider2; // Attach a trigger collider for right punch detection
@@ -17,9 +21,9 @@ public class BallInteraction : MonoBehaviour
     private bool isKicking;
     private bool isHeading;
 
-    private void Start()
+    public bool Goal()
     {
-        //animator = GetComponent<Animator>();
+        return ballRigidbody.position.x > rGoal.position.x || ballRigidbody.position.x < bGoal.position.x;
     }
 
     public void Punch()
