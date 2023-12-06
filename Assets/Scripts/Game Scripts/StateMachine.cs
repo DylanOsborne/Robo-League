@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -41,7 +42,7 @@ public class StateMachine : MonoBehaviour
             // Update game time and check for goal
             currentGameTime -= Time.deltaTime;
 
-            if (currentGameTime <= 0f)
+            if (currentGameTime <= 295f)
             {
                 // If game time is up, set the game state to GameOver
                 SetGameState(GameState.GameOver);
@@ -123,6 +124,6 @@ public class StateMachine : MonoBehaviour
 
     private void GameOver()
     {
-        
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }
