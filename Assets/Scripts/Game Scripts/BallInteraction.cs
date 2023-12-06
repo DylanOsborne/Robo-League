@@ -20,10 +20,16 @@ public class BallInteraction : MonoBehaviour
     private bool isKicking;
     private bool isHeading;
 
-    public bool Goal()
+    public bool GoalB()
     {
         // Check if the ball is past the red or blue goals
-        return ballRigidbody.position.x > rGoal.position.x || ballRigidbody.position.x < bGoal.position.x;
+        return ballRigidbody.position.x < bGoal.position.x;
+    }
+
+    public bool GoalR()
+    {
+        // Check if the ball is past the red or blue goals
+        return ballRigidbody.position.x > rGoal.position.x;
     }
 
     public void ResetBall()

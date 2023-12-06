@@ -19,12 +19,19 @@ public class StateMachine : MonoBehaviour
     private int gameLength = 300;
     public float currentGameTime;
 
+    public int blueGoals;
+    public int redGoals;
+
     void Start()
     {
         // Set initial positions and game time
         spawnManager.StartPos();
         currentGameTime = gameLength;
         SetGameState(GameState.Paused);
+
+        // Set initial goal status
+        blueGoals = 0;
+        redGoals = 0;
     }
 
     void Update()
@@ -40,9 +47,15 @@ public class StateMachine : MonoBehaviour
                 SetGameState(GameState.GameOver);
             }
             
-            if (ballInteraction.Goal())
+            if (ballInteraction.GoalB())
             {
                 // If a goal is scored, trigger the GoalScored function
+                redGoals++;
+                GoalScored();
+            } else if(ballInteraction.GoalR())
+            {
+                // If a goal is scored, trigger the GoalScored function
+                blueGoals++;
                 GoalScored();
             }
         }

@@ -21,9 +21,12 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        // Update time and stamina text
+        // Update time, stamina, and goal text
         TimeSpan time = TimeSpan.FromSeconds(stateMachine.currentGameTime);
         timeText.text = time.ToString("mm':'ss");
         staminaText.text = Mathf.RoundToInt(staminaSystem.currentStamina).ToString();
+
+        rGoalText.text = stateMachine.redGoals.ToString();
+        bGoalText.text = stateMachine.blueGoals.ToString();
     }
 }
