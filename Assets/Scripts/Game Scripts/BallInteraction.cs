@@ -16,9 +16,10 @@ public class BallInteraction : MonoBehaviour
 
     public Rigidbody ballRigidbody;
 
-    private bool isPunching;
-    private bool isKicking;
-    private bool isHeading;
+    // Trigger Flags
+    private bool isPunching = false;
+    private bool isKicking = false;
+    private bool isHeading = false;
 
     public bool GoalB()
     {
@@ -32,6 +33,23 @@ public class BallInteraction : MonoBehaviour
         return ballRigidbody.position.x > rGoal.position.x;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check which body part triggered the collision
+        if (other == headerCollider & isHeading)
+        {
+            ApplyForce(transform.forward - transform.up, 15f); // Header force
+        }
+        else if (other == punchCollider1 && isPunching || other == punchCollider2 && isPunching)
+        {
+            ApplyForce(transform.forward, 15f); // Punch force
+        }
+        else if (other == kickCollider & isKicking)
+        {
+            ApplyForce(transform.forward + transform.up, 15f); // Kick force
+        }
+    }
+
     public void ResetBall()
     {
         // Stop the ball's movement and rotation
@@ -39,9 +57,15 @@ public class BallInteraction : MonoBehaviour
         ballRigidbody.angularVelocity = Vector3.zero;
     }
 
+    // Apply force with a specific direction and strength
+    private void ApplyForce(Vector3 forceDirection, float forceStrength)
+    {
+        // Apply the force to the ball
+        ballRigidbody.AddForce(forceDirection * forceStrength, ForceMode.Impulse);
+    }
+
     public void Punch()
     {
-        // Set punch flag to true
         isPunching = true;
 
         // Trigger punch animation
@@ -53,7 +77,6 @@ public class BallInteraction : MonoBehaviour
 
     public void Kick()
     {
-        // Set kick flag to true
         isKicking = true;
 
         // Trigger kick animation
@@ -65,7 +88,6 @@ public class BallInteraction : MonoBehaviour
 
     public void Header()
     {
-        // Set header flag to true
         isHeading = true;
 
         // Trigger header animation
@@ -76,47 +98,21 @@ public class BallInteraction : MonoBehaviour
     }
 
     // Methods to reset the action parameters
-    private void ResetPunch()
-    {
+    private void ResetPunch() 
+    { 
         animator.SetBool("punch", false);
         isPunching = false;
     }
 
-    private void ResetKick()
-    {
+    private void ResetKick() 
+    { 
         animator.SetBool("kick", false);
         isKicking = false;
     }
 
-    private void ResetHeader()
-    {
+    private void ResetHeader() 
+    { 
         animator.SetBool("header", false);
         isHeading = false;
-    }
-
-    private void ApplyForce(Collider collider, Vector3 forceDirection, float forceStrength)
-    {
-        if (collider != null && ballRigidbody != null)
-        {
-            // Check if the collider is in contact with the ball and the corresponding action flag is true
-            if (collider.bounds.Intersects(ballRigidbody.GetComponent<Collider>().bounds) &&
-                collider == punchCollider1 && isPunching ||
-                collider == punchCollider2 && isPunching ||
-                collider == kickCollider && isKicking ||
-                collider == headerCollider && isHeading)
-            {
-                // Apply the force to the ball
-                ballRigidbody.AddForce(forceDirection * forceStrength, ForceMode.Impulse);
-            }
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        // Apply forces when the trigger colliders are in contact with the ball
-        ApplyForce(punchCollider1, transform.forward, 5f);
-        ApplyForce(punchCollider2, transform.forward, 5f);
-        ApplyForce(kickCollider, transform.forward + transform.up, 5f);
-        ApplyForce(headerCollider, transform.forward - transform.up, 5f);
     }
 }

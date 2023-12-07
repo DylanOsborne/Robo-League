@@ -42,7 +42,7 @@ public class StateMachine : MonoBehaviour
             // Update game time and check for goal
             currentGameTime -= Time.deltaTime;
 
-            if (currentGameTime <= 295f)
+            if (currentGameTime <= 0f)
             {
                 // If game time is up, set the game state to GameOver
                 SetGameState(GameState.GameOver);
