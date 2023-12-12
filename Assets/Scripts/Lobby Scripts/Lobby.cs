@@ -10,7 +10,7 @@ public class Lobby : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    public void QuitGame()
+    public void Back()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }

@@ -1389,7 +1389,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 824022539}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
-        m_MethodName: LoadGame
+        m_MethodName: Back
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
